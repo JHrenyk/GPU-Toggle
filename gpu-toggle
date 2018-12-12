@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#lets see if this sticks or not
+
 # toggle between nvidia and intel gpu and then log user out to apply changes
 
 GPU=$(prime-select query)
