@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# toggle between nvidia and intel gpu and then log user out to apply changes
+
+GPU=$(prime-select query)
+USER=$(whoami)
+
+# Switch from nvidia to intel
+if [ "${GPU}" = nvidia ]
+	then
+		sudo prime-select intel
+		echo "Switching to Intel"
+fi
+
+# Switch from intel to nvidia
+if [ "${GPU}" = intel ]
+	then
+		sudo prime-select nvidia
+		echo "Switching to Nvidia"
+
+fi
+
+# Give time for GPU to switch and display echo 
+echo "Logging out..."
+
+# Logout user
+
+if [ "${?}" = 0 ]
+	then
+		loginctl terminate-user "$USER"
+	fi
+exit 0
