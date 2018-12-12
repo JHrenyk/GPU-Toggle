@@ -1,8 +1,10 @@
 #!/bin/bash
-
-#lets see if this sticks or not
-
-# toggle between nvidia and intel gpu and then log user out to apply changes
+#
+# Jordan Hrenyk, December 11th/2018
+#
+# Used in a Laptop with both a Intel iGPU and Nvidia GPU.
+# Root Access is required to run the prime-select command and a 
+# Log out and back in is required to apply the changes.
 
 GPU=$(prime-select query)
 USER=$(whoami)
@@ -21,9 +23,6 @@ if [ "${GPU}" = intel ]
 		echo "Switching to Nvidia"
 
 fi
-
-# Give time for GPU to switch and display echo 
-echo "Logging out..."
 
 # Logout user
 
