@@ -25,7 +25,6 @@ if [[ "${GPU}" = nvidia ]]
 		fi
 fi
 
-exit 0
 # Switch from intel to nvidia
 if [[ "${GPU}" = intel ]] 
 	then
