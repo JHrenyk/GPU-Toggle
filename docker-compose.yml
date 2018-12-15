@@ -1,0 +1,133 @@
+version: "2"
+services:
+  
+  heimdall:
+    image: linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $CONF/Heimdall/config:/config
+    ports:
+      - 80:80
+      - 443:443
+    mem_limit: 4096m
+    restart: on-failure
+  
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    environment:
+      - TZ=$TZ    
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $CONF/Portainer/data:/data
+      - $HOME/Docker/shared:/shared
+    ports:
+      - 38099:9000    
+    mem_limit: 4096m
+    restart: on-failure
+    
+  deluge:
+    image: linuxserver/deluge
+    container_name: deluge
+    network_mode: host
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - UMASK_SET=<022>
+      - TZ=$TZ
+    volumes:
+      - $CONF/Deluge/config:/config
+      - $HOME/Downloads:/downloads
+    ports:
+      - 38080:6789
+    mem_limit: 4096m
+    restart: on-failure
+  
+  nzbget:
+    image: linuxserver/nzbget
+    container_name: nzbget
+    network_mode: host
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $CONF/NZBGet/config:/config
+      - $DOWNLOAD:/Downloads
+    ports:
+      - 38081:6789
+    mem_limit: 4096m
+    restart: on-failure
+  
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    network_mode: host
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $CONF/Sonarr/config:/config
+      - $TV:/TV
+      - $DOWNLOAD:/Downloads
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 38082:8989
+    mem_limit: 4096m
+    restart: on-failure
+    
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    network_mode: host
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $CONF/Radarr/config:/config
+      - $DOWNLOAD:/Downloads
+      - $MOVIES:/Movies
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 38083:7878
+    mem_limit: 4096m
+    restart: on-failure
+    
+  plex:
+    image: plexinc/pms-docker
+    container_name: plexserver
+    network_mode: host
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - PLEX_CLAIM="claim-HjV8nn2Lj1nx28cFS9vL"
+    volumes:
+      - $CONF/Plex/config:/config
+      - $MOVIES:/data/Movies
+      - $TV:/data/TV
+      - $HOME/Plex/transcoding:/transcoding
+    mem_limit: 4096m
+    restart: on-failure
+  
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $CONF/Ombi/config:/config
+    ports:
+      - 38085:3579
+    mem_limit: 4096m
+    restart: on-failure      
+
