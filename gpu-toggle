@@ -10,24 +10,37 @@ GPU=$(prime-select query)
 USER=$(whoami)
 
 # Switch from nvidia to intel
-if [ "${GPU}" = nvidia ]
+if [[ "${GPU}" = nvidia ]]
 	then
 		sudo prime-select intel
+		sudo undervolt --core -160 --cache -160 --gpu -70
 		echo "Switching to Intel"
+		
+		if [[ ${GPU} = intel ]]
+		then
+			loginctl terminate-user "$USER"
+		else
+			echo " Unable to switch to intel GPU"
+			exit 1
+		fi
 fi
 
+exit 0
 # Switch from intel to nvidia
-if [ "${GPU}" = intel ]
+if [[ "${GPU}" = intel ]] 
 	then
 		sudo prime-select nvidia
+		sudo undervolt --core -145 --cache -145 --gpu -65
 		echo "Switching to Nvidia"
+		if [[ ${GPU} = nvidia ]]
+		then
+			loginctl terminate-user "$USER"
+		else
+			echo " Unable to switch to nvidia GPU"
+			exit 1
+		fi
 
 fi
 
-# Logout user
-
-if [ "${?}" = 0 ]
-	then
-		loginctl terminate-user "$USER"
-	fi
 exit 0
+
