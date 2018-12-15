@@ -14,16 +14,18 @@ if [[ "${GPU}" = nvidia ]]
 	then
 		sudo prime-select intel
 		echo "Switching to Intel"
-		
-		if [[ ${GPU} = intel ]]
-		then	
-			echo "Switch completed"
-			sudo undervolt --core -160 --cache -160 --gpu -70
-			loginctl terminate-user "$USER"
+		newGPU=$(prime-select query)
+
+		if [[ ${newGPU} = intel ]]
+			then	
+				echo "Switch completed"
+				sudo undervolt --core -160 --cache -160 --gpu -70
+				loginctl terminate-user "$USER"
 			exit 0
-		else
-			sudo prime-select nvidia
-			echo " Unable to switch to intel GPU"
+	
+			else
+				sudo prime-select nvidia
+				echo " Unable to switch to intel GPU"
 			exit 1
 		fi
 fi
@@ -33,20 +35,20 @@ if [[ "${GPU}" = intel ]]
 	then
 		sudo prime-select nvidia
 		echo "Switching to Nvidia"
+		newGPU=$(prime-select query)
 		
-		if [[ ${GPU} = nvidia ]]
-		then
-			echo "Switch completed"
-			sudo undervolt --core -145 --cache -145 --gpu -65
-			loginctl terminate-user "$USER"
+		if [[ ${newGPU} = nvidia ]]
+			then
+				echo "Switch completed"
+				sudo undervolt --core -145 --cache -145 --gpu -65
+				loginctl terminate-user "$USER"
 			exit 0
-		else
-			echo " Unable to switch to nvidia GPU"
-			sudo prime-select intel
+		
+			else
+				echo " Unable to switch to nvidia GPU"
+				sudo prime-select intel
 			exit 1
 		fi
 
 fi
-
-exit 0
 
