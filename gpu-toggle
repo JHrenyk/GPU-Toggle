@@ -6,6 +6,7 @@
 # Root Access is required to run the prime-select command and a 
 # Log out and back in is required to apply the changes.
 
+source "$HOME/.local/lib/python2.7/site-packages/config"
 GPU=$(prime-select query)
 USER=$(whoami)
 
@@ -19,7 +20,7 @@ if [[ "${GPU}" = nvidia ]]
 		if [[ ${newGPU} = intel ]]
 			then	
 				echo "Switch completed"
-				sudo undervolt --core -160 --cache -160 --gpu -70
+				sudo undervolt --core "${CORE1}" --cache "${CORE1}" --gpu "${GPU1}"
 				loginctl terminate-user "$USER"
 			exit 0
 	
@@ -40,7 +41,7 @@ if [[ "${GPU}" = intel ]]
 		if [[ ${newGPU} = nvidia ]]
 			then
 				echo "Switch completed"
-				sudo undervolt --core -145 --cache -145 --gpu -65
+				sudo undervolt --core "${CORE2}" --cache "${CORE2}" --gpu "${GPU2}"
 				loginctl terminate-user "$USER"
 			exit 0
 		
